@@ -104,18 +104,21 @@ while running:
 
     
     # cat tail
-    tw = 50
-    th = 150
+    tw, th = 50, 150
     tail_surf = pygame.Surface((tw, th), pygame.SRCALPHA)
-    tail_rect = pygame.Rect(
-        bus_pos.x - 125,   # attach at back
-        bus_pos.y - 5,    # vertical offset
-        tw,                # tail thickness
-        th                # tail length
-    )
 
-    pygame.draw.ellipse(tail_surf, (140, 90, 40), tail_rect)
-    pygame.transform.rotate( tail_surf, 90)
+    # ellipse in tail_surf
+    pygame.draw.ellipse(tail_surf, (140, 90, 40), (0, 0, tw, th))
+
+    # rotate 
+    tail_surf = pygame.transform.rotate(tail_surf, -75)
+
+    # position on screen 
+    tail_pos = (bus_pos.x - 200, bus_pos.y - 30)
+
+    # blit to screen
+    screen.blit(tail_surf, tail_pos)
+
 
 
     # Draw legs as ellipses 
