@@ -9,15 +9,39 @@ bus_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 speed = 300
 
 bus_shape = [
-    (-110,  40),
-    ( 110,  40),
-    ( 110,  10),
-    (  90,  10),
-    (  90, -35),
-    (  60, -50),
-    (-95, -50),
-    (-110, -35),
+    # --- belly (front -> back) ---
+    (-120,  38),
+    (-95,   46),
+    (-60,   52),
+    (-20,   55),
+    ( 25,   54),
+    ( 70,   52),
+    (105,   48),
+    (125,   40),
+
+    # --- back / rump up ---
+    (135,   30),
+    (138,   15),
+    (136,    0),
+    (130,  -12),
+
+    # --- roof dome (back -> front) ---
+    (115,  -28),
+    ( 85,  -42),
+    ( 40,  -50),
+    ( -5,  -50),
+    (-45,  -44),
+    (-75,  -34),
+
+    # --- head / snout bump (front top -> front bottom) ---
+    (-98,  -22),
+    (-112, -10),
+    (-120,   5),
+
+    # --- return to belly front ---
+    (-122,  22),
 ]
+
 
 leg_offsets = [(-80, 40), (-40, 40), (0, 40), (40, 40), (80, 40)]
 # wheel_width = 20
@@ -46,6 +70,53 @@ while running:
 
     pygame.draw.polygon(screen, (140, 90, 40), bus_points)
     pygame.draw.polygon(screen, (60, 35, 10), bus_points, 4)
+
+        # --- Simple cat head (ellipse + ears) ---
+    hx = bus_pos.x + 100
+    hy = bus_pos.y - 35
+    # Head ellipse
+    head_rect = pygame.Rect(
+        hx,  # x
+        hy,   # y
+        100,               # width
+        80                # height
+    )
+
+    pygame.draw.ellipse(screen, (140, 90, 40), head_rect)
+
+    # Left ear
+    left_ear = [
+        (hx + 10, hy + 10),
+        (hx + 30, hy - 25),
+        (hx + 50, hy + 10),
+    ]
+
+    # Right ear
+    right_ear = [
+        (hx + 45, hy + 10),
+        (hx + 65, hy - 25),
+        (hx + 85, hy + 10),
+    ]
+
+    pygame.draw.polygon(screen, (140, 90, 40), left_ear)
+
+    pygame.draw.polygon(screen, (140, 90, 40), right_ear)
+
+    
+    # cat tail
+    tw = 50
+    th = 150
+    tail_surf = pygame.Surface((tw, th), pygame.SRCALPHA)
+    tail_rect = pygame.Rect(
+        bus_pos.x - 125,   # attach at back
+        bus_pos.y - 5,    # vertical offset
+        tw,                # tail thickness
+        th                # tail length
+    )
+
+    pygame.draw.ellipse(tail_surf, (140, 90, 40), tail_rect)
+    pygame.transform.rotate( tail_surf, 90)
+
 
     # Draw legs as ellipses 
     for ox, oy in leg_offsets:
